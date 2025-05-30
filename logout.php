@@ -1,7 +1,5 @@
 <?php
 
-session_unset();
-
 //logout.php
 
 include('config.php');
@@ -14,7 +12,5 @@ session_destroy();
 
 //redirect page to index.php
 header('location:index.php');
-exit();
-
 
 ?>

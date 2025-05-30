@@ -1,23 +1,28 @@
 <?php
-// Iniciar sesión solo si aún no está iniciada
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
-// Incluir el autoload de Google Client
+//start session on web page
+session_start();
+
+//config.php
+
+//Include Google Client Library for PHP autoload file
 require_once 'vendor/autoload.php';
 
-// Crear cliente de Google
+//Make object of Google API Client for call Google API
 $google_client = new Google_Client();
 
-// Configurar credenciales
-$google_client->setClientId('727283115644-7a620c038j7k3sv8hd57rrpkhpvulee8.apps.googleusercontent.com');
-$google_client->setClientSecret('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');
+//Set the OAuth 2.0 Client ID | Copiar "Aqui tu ID DE CLIENTE"
+$google_client->setClientId('919504303276-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com');
 
-// Establecer URI de redirección (este archivo debe coincidir con el URI configurado en la consola de Google)
-$google_client->setRedirectUri('http://localhost/index.php');
+//Set the OAuth 2.0 Client Secret key Aqui tu CLAVE
+$google_client->setClientSecret('GOCSPX-xxxxxxxxxxxxxxxxxxxxxx');
 
-// Solicitar permisos para email y perfil
+//Set the OAuth 2.0 Redirect URI | URL AUTORIZADO
+$google_client->setRedirectUri('http://localhost/DemoCrud4/index.php');
+
+// to get the email and profile 
 $google_client->addScope('email');
+
 $google_client->addScope('profile');
+
 ?>

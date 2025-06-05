@@ -1,111 +1,107 @@
 INSTRUCCIONES PARA VISUALIZAR Y EJECUTAR EL SISTEMA WEB
 1. Requisitos previos
-Antes de comenzar, se debe contar con los siguientes elementos instalados en el equipo:
+Antes de comenzar, asegúrese de tener instalado:
 
-Un servidor local como XAMPP, que incluye Apache (servidor web) y MySQL (gestor de base de datos).
+XAMPP (servidor local con Apache y MySQL):
+Descargable desde: https://www.apachefriends.org/es/index.html
 
-Puede descargarse desde: https://www.apachefriends.org/es/index.html
+Después de instalar:
 
-Una vez instalado, se debe iniciar el panel de control de XAMPP y activar los módulos:
+Iniciar el Panel de control de XAMPP.
 
-Apache
+Activar los servicios Apache y MySQL.
 
-MySQL
+2. Ubicación de los archivos del proyecto
+Reunir todos los archivos recibidos (PHP, CSS, imágenes, carpetas internas, etc.) en una única carpeta. Puede nombrarla, por ejemplo, inicio.
 
-2. Preparación del entorno de trabajo
-Reunir todos los archivos recibidos en una única carpeta. Por ejemplo, se puede nombrar esta carpeta como inicio.
-
-Copiar dicha carpeta en el siguiente directorio:
+Copiar dicha carpeta en:
 
 makefile
 
 C:\xampp\htdocs\
-Este paso coloca el proyecto en el entorno adecuado para ser ejecutado por el servidor local.
+3. Crear la base de datos
+Este proyecto utiliza una base de datos llamada registro. Se debe importar el archivo registro (1) 1.sql proporcionado.
 
-3. Creación de la base de datos
-Ingresar en el navegador a:
+Pasos:
+Ingresar a http://localhost/phpmyadmin
 
-arduino
+Hacer clic en "Nueva" para crear una base de datos con el nombre:
 
-http://localhost/phpmyadmin
-Crear una base de datos con el mismo nombre que aparece en el archivo config.php del proyecto.
+nginx
 
-Por ejemplo, si dentro de config.php figura:
+registro
+Ingresar a la base de datos recién creada.
 
-php
+Seleccionar la pestaña "Importar".
 
-$conexion = mysqli_connect("localhost", "root", "", "usuarios");
-entonces se debe crear una base de datos llamada usuarios.
+Subir y ejecutar el archivo:
+registro (1) 1.sql
 
-Si se proporciona un archivo .sql, se debe importar desde la pestaña Importar de phpMyAdmin. En caso de no tenerlo, las tablas deberán crearse manualmente.
+Esto creará las tablas necesarias: datos, registro2, registronuevo, usuarios, y vehiculos, además de cargar registros de ejemplo.
 
-4. Acceso al sistema
-Una vez copiados los archivos y creada la base de datos, se puede acceder al sistema abriendo un navegador web y escribiendo la siguiente URL:
+4. Acceder al sistema
+Una vez que los archivos estén copiados y la base de datos importada, ingresar en el navegador a:
 
 arduino
 
 http://localhost/inicio/
-o bien:
+o
 
 arduino
 
 http://localhost/inicio/index.php
-5. Configuración del inicio de sesión con Google (Login Básico Google)
-El proyecto incluye un módulo para autenticación mediante cuenta de Google. Para que este funcione correctamente, se debe realizar lo siguiente:
+5. Configuración del inicio de sesión con Google
+Este sistema permite autenticación mediante cuenta de Google. A continuación, se detalla cómo configurarla correctamente.
 
 5.1 Generar credenciales en Google API Console
-Acceder al sitio: https://console.developers.google.com/
+Acceder a:
+https://console.developers.google.com/
 
-Crear un nuevo proyecto o seleccionar uno existente.
+Crear un proyecto nuevo o usar uno existente.
 
-Configurar el consentimiento del usuario. Se recomienda seleccionar:
+Configurar la pantalla de consentimiento del usuario:
 
 Tipo de usuario: Externo
 
 Permisos solicitados: email, profile
 
-Ir a la sección Credenciales y crear un nuevo OAuth Client ID:
+Crear una credencial del tipo OAuth 2.0 Client ID:
 
 Tipo de aplicación: Aplicación web
 
-URI de redirección autorizada: debe coincidir con la ubicación del archivo index.php, por ejemplo:
+URI de redirección autorizada (según este proyecto):
 
 arduino
 
 http://localhost/inicio/index.php
-Una vez creada la credencial, se obtendrán dos datos importantes:
-
-Client ID
-
-Client Secret
-
-5.2 Reemplazar las credenciales en el código
-Buscar el siguiente bloque en el archivo que maneja la autenticación:
+5.2 Reemplazar valores en el código
+En el archivo que contiene la configuración del cliente de Google (por ejemplo, index.php o dentro de Login-Google-main/), buscar y reemplazar el siguiente bloque:
 
 php
 
 $google_client->setClientId('727283115644-7a620c038j7k3sv8hd57rrpkhpvulee8.apps.googleusercontent.com');
 $google_client->setClientSecret('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');
 $google_client->setRedirectUri('http://localhost/index.php');
-Reemplazarlo con los valores obtenidos desde la consola de Google. Por ejemplo:
+por los valores generados en su cuenta de Google Cloud:
 
 php
 
 $google_client->setClientId('SU_CLIENT_ID');
 $google_client->setClientSecret('SU_CLIENT_SECRET');
 $google_client->setRedirectUri('http://localhost/inicio/index.php');
-Es fundamental que la URL del Redirect URI coincida exactamente con la registrada en Google Cloud, incluyendo el nombre correcto de la carpeta del proyecto.
+Asegúrese de que la URL de redirección coincida exactamente con la configurada en Google.
 
-6. Instalación de dependencias con Composer (para el login de Google)
-Este proyecto requiere el uso de Composer, una herramienta de gestión de dependencias para PHP.
+6. Instalación de dependencias con Composer (requerido para el login de Google)
+Este sistema depende de la biblioteca oficial de Google API para funcionar correctamente. Para ello se necesita Composer.
 
 6.1 Instalar Composer
-Descargar e instalar Composer desde: https://getcomposer.org/download/
+Descargar e instalar desde:
+https://getcomposer.org/download/
 
-6.2 Instalar el cliente de Google API
+6.2 Instalar el cliente de Google API en el proyecto
 Abrir una terminal (símbolo del sistema) como administrador.
 
-Navegar hasta la carpeta del proyecto. Por ejemplo:
+Posicionarse dentro de la carpeta del proyecto:
 
 bash
 
@@ -115,22 +111,24 @@ Ejecutar el siguiente comando:
 bash
 
 composer require google/apiclient:"^2.12.1"
-Este proceso puede tardar algunos minutos según la velocidad de la conexión a Internet.
+Este comando descargará las dependencias necesarias para realizar la autenticación con Google. Puede tardar algunos minutos dependiendo de la conexión.
 
 7. Verificación final
-Una vez realizados todos los pasos:
+Una vez realizados todos los pasos anteriores:
 
-Todos los archivos deben estar dentro de la carpeta inicio ubicada en htdocs.
+La carpeta inicio debe estar dentro de htdocs.
 
-La base de datos debe estar creada correctamente.
+La base de datos registro debe estar creada e importada correctamente.
 
-Las credenciales de Google deben estar actualizadas en el código.
+El archivo config.php debe hacer referencia a esa base de datos.
 
-Las dependencias deben haberse instalado mediante Composer.
+Las credenciales de Google deben estar correctamente reemplazadas.
 
-Acceda nuevamente desde el navegador a:
+Composer debe haber instalado las dependencias necesarias.
+
+Finalmente, ingresar en el navegador a:
 
 arduino
 
 http://localhost/inicio/index.php
-El sistema debería estar funcionando correctamente. Ante cualquier mensaje de error, revisar el archivo config.php, las rutas, y la configuración del entorno.
+Si todo fue configurado correctamente, el sistema estará funcionando.
